@@ -10,6 +10,7 @@
 #include <iostream>
 using namespace std;
 
+void FibonacciNumber(int number);
 
 //Main program
 
@@ -27,4 +28,30 @@ int main () {
          << " of the Fibonacci sequence. Here they are:"
          << " \n ";
     cout << " \n ";
+    
+    int length = 20;
+    FibonacciNumber(length);
+}
+
+
+
+void FibonacciNumber(int number){
+
+    int fibonacciArray[number];
+    int first = 0;
+    int second = 1;
+    fibonacciArray[0] = first ;
+    fibonacciArray[1] = second ;
+
+    int i = 2;
+    while(i <= number){
+       
+      int fnumber = first + second;
+      fibonacciArray[i] = fnumber ;
+      first  = second;
+      second = fnumber;
+      i++ ;
+    }
+
+
 }
