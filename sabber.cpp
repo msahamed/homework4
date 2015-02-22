@@ -12,6 +12,7 @@
 #include <sstream>
 #include <stdlib.h> 
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -44,10 +45,48 @@ int main () {
 
     // calling FibonacciNumber function to computer the series
     FibonacciNumber(length);
+    
 }
 
 
- 
+
+
+void printToFile(int* fibonacciArray, int length){
+
+     ofstream outputToFile;
+     outputToFile.open("sabber.out", ofstream::out | ofstream::app); 
+    
+     int colNumber = 1;
+     for (int i = 0; i < length; i++)
+
+       if ((colNumber%10) == 0) {
+          outputToFile << fibonacciArray[i] <<left<< setw(13) <<endl;
+          colNumber++;
+
+       }else{
+          outputToFile << fibonacciArray[i] <<left<< setw(13);
+          colNumber++;
+       }
+}
+
+
+void printOnTerminal(int* fibonacciArray, int length){
+
+     int colNumber = 1;
+     for (int i = 0; i < length; i++)
+       
+       if ((colNumber%10) == 0) {
+          cout << fibonacciArray[i] <<left<< setw(13) <<endl;
+          colNumber++;
+
+       }else{
+          cout << fibonacciArray[i] <<left<< setw(13);
+          colNumber++;
+       }
+}
+
+
+
 int open_input(string inputFileName){
    
    ifstream inputFile;
@@ -73,7 +112,7 @@ void FibonacciNumber(int N){
 
     int number = 10 * N;
     int fibonacciArray[number];
-    int first = 0;
+    int first = 00;
     int second = 1;
     fibonacciArray[0] = first ;
     fibonacciArray[1] = second ;
@@ -87,6 +126,9 @@ void FibonacciNumber(int N){
       second = fnumber;
       i++ ;
     }
+    cout<< "length of the input : " << N << endl;
+    printOnTerminal(fibonacciArray, N);
+    cout << endl;
 
-
+    printToFile(fibonacciArray, N);
 }
