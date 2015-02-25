@@ -3,10 +3,11 @@
  * Homework -4
  * Programming tools for Eanginners and scientists
  * Spring 2015
- * Github link : https://github.com/msahamed/ProgrammingTools/tree/master/homeWork3
+ * Github link : https://github.com/msahamed/homework4
  */
 
 
+//Libraries
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -16,48 +17,60 @@
 
 using namespace std;
 
-
+// This function is for opening output file
 void open_output(ofstream& outputFile, string fileName){
 
-     outputFile.open("fileName", ofstream::out | ofstream::app);
+     outputFile.open(fileName.c_str());
 }
 
 
+// Function for printing to file and on Terminal
 void print_output(ofstream& outputFile, int number, long double* fibonacciArray, int length){
 
    int colNumber;
    switch (number){
      case 1 :
          colNumber = 1;
-     for (int i = 0; i < length; i++){
+         for (int i = 0; i < length; i++) {
 
-       if ((colNumber%10) == 0) {
-          outputFile << fibonacciArray[i] <<left<< setw(13) <<endl;
-          colNumber++;
+            if ((colNumber%10) == 0) {
+               outputFile << fibonacciArray[i] <<left<< setw(13) <<endl;
+               colNumber++;
 
-       }else{
-          outputFile << fibonacciArray[i] <<left<< setw(13);
-          colNumber++;
-       }
-     }
+           
+			}
+		    else {
+              outputFile << fibonacciArray[i] << left << setw(13);
+              colNumber++;
+           }
+         
+		 }
+     cout << endl;
      break;
-   case 2 : 
-       colNumber = 1;
-       for (int i = 0; i < length; i++){
-          if ((colNumber%10) == 0) {
-             cout << fibonacciArray[i] <<left<< setw(13) <<endl;
-             colNumber++;
-          }
-          else {
-             cout << fibonacciArray[i] <<left<< setw(13);
-             colNumber++;
-          }
-       } 
-    break;
-    }
+	 case 2 : 
+         colNumber = 1;
+         for (int i = 0; i < length; i++) {
+		    
+			 if ((colNumber%10) == 0) {
+			    cout << fibonacciArray[i] <<left<< setw(13) <<endl;
+			    colNumber++;
+          
+			 }
+             else {
+                cout << fibonacciArray[i] <<left<< setw(13);
+                colNumber++;
+             }
+       
+		 }
+     cout << endl;
+     break;
+  
+   
+   }
 }
 
 
+// Functions for handelling errors
 void generateError(int errorNumber, string name){
 
     ofstream outputErrorFile;
@@ -67,13 +80,13 @@ void generateError(int errorNumber, string name){
           outputErrorFile << "Error # 1"    << "Error reading the file  ' " << name << " '" << endl; 
           break;
       case 2 :
-          outputErrorFile << "Error # 2 : Invalied input (" << name << "). Number must be greater" 
+          outputErrorFile << "Error # 2 : Invalid input. Number must be greater" 
                           << " than or equal to 1. please correct the input file" << endl; 
           break;
     }
 }
 
-
+// Functions for opening the Input file
 void open_input(ifstream& inputFile, string inputFileName){
 
    inputFile.open(inputFileName.c_str());
@@ -122,7 +135,8 @@ int main () {
     // get the number from the file
     int length = getNumber(inputFile);
     inputFile.close();
-
+    
+	//Checking the number if is <1
     if (length < 1){
        string name = " ";
 
@@ -132,25 +146,25 @@ int main () {
        exit(EXIT_FAILURE);
 
     }
-//    inputFile.close();
    
     // calculating Fibonacci series
-     int arrayLength = 10*length;
-     long double fibonacciArray[arrayLength];
+	int arrayLength = 2 * length;
+	long double fibonacciArray[arrayLength];
 
-     long double first = 0;
-     long double  second = 1;
-     fibonacciArray[0] = first ;
-     fibonacciArray[1] = second ;
+	long double first = 0;
+	long double  second = 1;
+	fibonacciArray[0] = first ;
+	fibonacciArray[1] = second ;
      
-     int i = 2;
-     while(i <= arrayLength){
-     
-       long double fnumber = first + second;
+	int i = 2;
+	while(i <= arrayLength) {
+		 
+	   long double fnumber = first + second;
        fibonacciArray[i] = fnumber ;
        first  = second;
        second = fnumber;
        i++ ;
+		 
      }
     
     // open output file
