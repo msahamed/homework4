@@ -16,17 +16,94 @@
 
 using namespace std;
 
-void FibonacciNumber(int number);
-int open_input(string inputFileName);
 
-//Main program
+void open_output(ofstream& outputFile, string fileName){
+
+     outputFile.open("fileName", ofstream::out | ofstream::app);
+}
+
+
+void print_output(ofstream& outputFile, int number, long double* fibonacciArray, int length){
+
+   int colNumber;
+   switch (number){
+     case 1 :
+         colNumber = 1;
+     for (int i = 0; i < length; i++){
+
+       if ((colNumber%10) == 0) {
+          outputFile << fibonacciArray[i] <<left<< setw(13) <<endl;
+          colNumber++;
+
+       }else{
+          outputFile << fibonacciArray[i] <<left<< setw(13);
+          colNumber++;
+       }
+     }
+     break;
+   case 2 : 
+       colNumber = 1;
+       for (int i = 0; i < length; i++){
+          if ((colNumber%10) == 0) {
+             cout << fibonacciArray[i] <<left<< setw(13) <<endl;
+             colNumber++;
+          }
+          else {
+             cout << fibonacciArray[i] <<left<< setw(13);
+             colNumber++;
+          }
+       } 
+    break;
+    }
+}
+
+
+void generateError(int errorNumber, string name){
+
+    ofstream outputErrorFile;
+    outputErrorFile.open("sabber.err", ofstream::out | ofstream::app);
+    switch (errorNumber) {
+      case 1 : 
+          outputErrorFile << "Error # 1"    << "Error reading the file  ' " << name << " '" << endl; 
+          break;
+      case 2 :
+          outputErrorFile << "Error # 2 : Invalied input (" << name << "). Number must be greater" 
+                          << " than or equal to 1. please correct the input file" << endl; 
+          break;
+    }
+}
+
+
+void open_input(ifstream& inputFile, string inputFileName){
+
+   inputFile.open(inputFileName.c_str());
+
+   if (inputFile.fail()) {
+      cout << "Error reading the file  " << inputFileName << endl;
+      generateError(1 , inputFileName);
+      exit(EXIT_FAILURE);
+   }
+}
+
+
+int getNumber(ifstream& inputFile ){
+    
+    string line;
+    int length;
+    getline(inputFile, line);
+    istringstream number (line);
+    number >> length;    
+    return length; 
+}
+
+
+// Main program 
 
 int main () {
-    
 
     cout << "\n";
-    cout << " I was able to compile this code using the HPC at the University of Memphis." 
-         << " When I compiled it there, it did not produce any warning message." 
+    cout << " I was able to compile this code using the HPC at the University of Memphis."
+         << " When I compiled it there, it did not produce any warning message."
          << " The HPC uses a GNU C++ compiler that can be considered a good up-to-date standard."
          << " I also version-controlled this code using git, and use a remote repository hosted by github."
          << " If I can do this, so can you!!!"
@@ -36,99 +113,58 @@ int main () {
          << " of the Fibonacci sequence. Here they are:"
          << " \n ";
     cout << " \n ";
-    
 
+    // open the input file 
     string inputFileName = "sabber.in" ;
+    ifstream inputFile;
+    open_input(inputFile, inputFileName);
 
-    // open the inputfile :
-    int length = open_input(inputFileName);
+    // get the number from the file
+    int length = getNumber(inputFile);
+    inputFile.close();
 
-    // calling FibonacciNumber function to computer the series
-    FibonacciNumber(length);
-    
-}
+    if (length < 1){
+       string name = " ";
 
+       cout << "Error # 2 : Invalied input number. Number must be greater than or equal to 1"
+            << "please correct the input file" << endl;
+       generateError(2,name);
+       exit(EXIT_FAILURE);
 
-
-
-void printToFile(int* fibonacciArray, int length){
-
-     ofstream outputToFile;
-     outputToFile.open("sabber.out", ofstream::out | ofstream::app); 
-    
-     int colNumber = 1;
-     for (int i = 0; i < length; i++)
-
-       if ((colNumber%10) == 0) {
-          outputToFile << fibonacciArray[i] <<left<< setw(13) <<endl;
-          colNumber++;
-
-       }else{
-          outputToFile << fibonacciArray[i] <<left<< setw(13);
-          colNumber++;
-       }
-}
-
-
-void printOnTerminal(int* fibonacciArray, int length){
-
-     int colNumber = 1;
-     for (int i = 0; i < length; i++)
-       
-       if ((colNumber%10) == 0) {
-          cout << fibonacciArray[i] <<left<< setw(13) <<endl;
-          colNumber++;
-
-       }else{
-          cout << fibonacciArray[i] <<left<< setw(13);
-          colNumber++;
-       }
-}
-
-
-
-int open_input(string inputFileName){
-   
-   ifstream inputFile;
-   inputFile.open(inputFileName.c_str());
-
-
-   if (inputFile.fail()) {
-      cout << "Error reading the file  " << inputFileName << endl;
-      exit(EXIT_FAILURE);
-   }
-
-    string line;
-    int length;
-    getline(inputFile, line);
-    istringstream number (line);
-    number >> length;
-    
-    return length; 
-}
-
-
-void FibonacciNumber(int N){
-
-    int number = 10 * N;
-    int fibonacciArray[number];
-    int first = 00;
-    int second = 1;
-    fibonacciArray[0] = first ;
-    fibonacciArray[1] = second ;
-
-    int i = 2;
-    while(i <= number){
-       
-      int fnumber = first + second;
-      fibonacciArray[i] = fnumber ;
-      first  = second;
-      second = fnumber;
-      i++ ;
     }
-    cout<< "length of the input : " << N << endl;
-    printOnTerminal(fibonacciArray, N);
-    cout << endl;
+//    inputFile.close();
+   
+    // calculating Fibonacci series
+     int arrayLength = 10*length;
+     long double fibonacciArray[arrayLength];
 
-    printToFile(fibonacciArray, N);
+     long double first = 0;
+     long double  second = 1;
+     fibonacciArray[0] = first ;
+     fibonacciArray[1] = second ;
+     
+     int i = 2;
+     while(i <= arrayLength){
+     
+       long double fnumber = first + second;
+       fibonacciArray[i] = fnumber ;
+       first  = second;
+       second = fnumber;
+       i++ ;
+     }
+    
+    // open output file
+    ofstream outputFile;
+    string outputFileName = "sabber.out";
+    open_output(outputFile, outputFileName);
+
+    // printing on terminal and to output file
+    int file = 1; int  terminal = 2;
+    print_output(outputFile, file, fibonacciArray, arrayLength);
+    print_output(outputFile, terminal, fibonacciArray, arrayLength);
+
+
+
 }
+    
+	    
